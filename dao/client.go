@@ -1,4 +1,4 @@
-package db
+package dao
 
 import (
 	"fmt"
@@ -6,8 +6,6 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )
-
-var db *gorm.DB
 
 // Client 数据库链接
 func Client() {
@@ -19,7 +17,7 @@ func Client() {
 		"Port",
 		"Database",
 	)
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+	Dao.db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		SkipDefaultTransaction: false,
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: false,
@@ -35,12 +33,12 @@ func Client() {
 func AutoTables() {
 	var err error
 	// 用户表
-	err = db.AutoMigrate(&User{})
+	err = Dao.db.AutoMigrate(&User{})
 	if err != nil {
 		fmt.Println(err)
 	}
 	// 工单表
-	err = db.AutoMigrate(&WorkOrder{})
+	err = Dao.db.AutoMigrate(&WorkOrder{})
 	if err != nil {
 		fmt.Println(err)
 	}
