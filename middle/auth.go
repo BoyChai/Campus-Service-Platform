@@ -3,8 +3,8 @@ package middle
 import (
 	"errors"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"net/http"
 )
 
@@ -70,16 +70,14 @@ func parseToken(tokenString string) (user map[string]interface{}, err error) {
 	if err != nil {
 		fmt.Println("parse token failed ", err)
 		//处理token解析后的各种错误
-		if ve, ok := err.(*jwt.ValidationError); ok {
-			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-				return nil, errors.New("TokenMalformed")
-			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
-				return nil, errors.New("TokenExpired")
-			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
-				return nil, errors.New("TokenNotValidYet")
-			} else {
-				return nil, errors.New("TokenInvalid")
-			}
+		if errors.Is(err, jwt.ErrTokenMalformed) {
+			return nil, errors.New("TokenMalformed")
+		} else if errors.Is(err, jwt.ErrTokenExpired) {
+			return nil, errors.New("TokenExpired")
+		} else if errors.Is(err, jwt.ErrTokenNotValidYet) {
+			return nil, errors.New("TokenNotValidYet")
+		} else {
+			return nil, errors.New("TokenInvalid")
 		}
 	}
 	return token.Claims.(jwt.MapClaims), nil
