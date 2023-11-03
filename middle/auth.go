@@ -1,16 +1,9 @@
 package middle
 
 import (
-	"errors"
-	"fmt"
+	"Campus-Service-Platform/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
 	"net/http"
-)
-
-// SECRET 加解密因子
-const (
-	SECRET = "ikun"
 )
 
 // JWTAuth 中间件，检查token
@@ -31,7 +24,7 @@ func JWTAuth() gin.HandlerFunc {
 				return
 			}
 			// parseToken 解析token包含的信息
-			claims, err := parseToken(token)
+			claims, err := utils.ParseToken(token)
 			if err != nil {
 				//token延期错误
 				if err.Error() == "TokenExpired" {
@@ -55,30 +48,4 @@ func JWTAuth() gin.HandlerFunc {
 			ctx.Next()
 		}
 	}
-}
-
-// parseToken 解析token
-func parseToken(tokenString string) (user map[string]interface{}, err error) {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		// 校验签名是否被篡改
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("not authorization")
-		}
-		//返回密钥与上面签发时保持一致
-		return []byte(SECRET), nil
-	})
-	if err != nil {
-		fmt.Println("parse token failed ", err)
-		//处理token解析后的各种错误
-		if errors.Is(err, jwt.ErrTokenMalformed) {
-			return nil, errors.New("TokenMalformed")
-		} else if errors.Is(err, jwt.ErrTokenExpired) {
-			return nil, errors.New("TokenExpired")
-		} else if errors.Is(err, jwt.ErrTokenNotValidYet) {
-			return nil, errors.New("TokenNotValidYet")
-		} else {
-			return nil, errors.New("TokenInvalid")
-		}
-	}
-	return token.Claims.(jwt.MapClaims), nil
 }

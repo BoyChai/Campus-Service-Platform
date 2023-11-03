@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Campus-Service-Platform/controller"
 	"Campus-Service-Platform/dao"
 	"Campus-Service-Platform/middle"
 	"github.com/gin-gonic/gin"
@@ -16,6 +17,8 @@ func main() {
 	// 加载中间件
 	r.Use(middle.CORS())
 	r.Use(middle.JWTAuth())
+	// 加载路由
+	controller.Router.InitApiRouter(r)
 	// 运行WebService
 	r.Run()
 }
