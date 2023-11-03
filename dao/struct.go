@@ -4,7 +4,10 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"gorm.io/gorm"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -47,6 +50,8 @@ type User struct {
 	WxID string `gorm:"unique"`
 	// 角色
 	Role Role `gorm:"not null"`
+	// 其他数据(上下级关系等信息)
+	Other JSON
 }
 
 // WorkOrder 工单表
@@ -136,3 +141,35 @@ const (
 	// Success 处理成功
 	Success
 )
+
+// GetID 获取补位的id
+func (u *User) GetID() string {
+	numberStr := strconv.Itoa(int(u.ID))
+	if len(numberStr) < 6 {
+		// 计算需要补充的零的数量
+		zeroCount := 6 - len(numberStr)
+		// 使用 strings.Repeat 函数来补充零
+		paddedNumberStr := strings.Repeat("0", zeroCount) + numberStr
+		return paddedNumberStr
+	}
+	return fmt.Sprint(u.ID)
+}
+
+// Clear 清除密码返回数据
+func (u User) Clear() User {
+	u.Pass = ""
+	return u
+}
+
+// GetID 获取补位的id
+func (w *WorkOrder) GetID() string {
+	numberStr := strconv.Itoa(int(w.ID))
+	if len(numberStr) < 6 {
+		// 计算需要补充的零的数量
+		zeroCount := 6 - len(numberStr)
+		// 使用 strings.Repeat 函数来补充零
+		paddedNumberStr := strings.Repeat("0", zeroCount) + numberStr
+		return paddedNumberStr
+	}
+	return fmt.Sprint(w.ID)
+}
