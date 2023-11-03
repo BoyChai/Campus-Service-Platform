@@ -42,4 +42,9 @@ func AutoTables() {
 	if err != nil {
 		fmt.Println(err)
 	}
+	// 聊天表
+	err = Dao.db.AutoMigrate(&Chat{})
+	if err != nil {
+		fmt.Println(err)
+	}
 }
