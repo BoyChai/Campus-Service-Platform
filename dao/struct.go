@@ -50,6 +50,20 @@ type WorkOrder struct {
 	Info JSON `gorm:"type:json;not null"`
 }
 
+// Chat 聊天表
+type Chat struct {
+	// 消息id
+	ID uint `gorm:"primaryKey;auto_increment"`
+	// 消息订单
+	OrderID uint `gorm:"not null"`
+	// 发送角色
+	Sender Role `gorm:"not null"`
+	// 发送时间
+	SendTime time.Time `gorm:"not null"`
+	// 消息内容
+	Message JSON `gorm:"type:json;not null"`
+}
+
 // Role 角色类别
 type Role int
 
