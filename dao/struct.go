@@ -1,6 +1,9 @@
 package dao
 
 import (
+	"database/sql/driver"
+	"encoding/json"
+	"errors"
 	"gorm.io/gorm"
 	"time"
 )
@@ -11,6 +14,22 @@ type dao struct {
 	db *gorm.DB
 }
 type JSON map[string]interface{}
+
+func (j JSON) Value() (driver.Value, error) {
+	return json.Marshal(j)
+}
+
+// Scan is used to convert a database value to the custom JSON type.
+func (j *JSON) Scan(value interface{}) error {
+	if value == nil {
+		return nil
+	}
+	bytes, ok := value.([]byte)
+	if !ok {
+		return errors.New("Invalid JSON format")
+	}
+	return json.Unmarshal(bytes, j)
+}
 
 // User 用户表
 type User struct {
@@ -38,6 +57,8 @@ type WorkOrder struct {
 	CreateUser uint `gorm:"not null"`
 	// OrderType 订单类型
 	OrderType OrderType `gorm:"not null"`
+	//  OrderStatus 订单状态
+	OrderStatus OrderStatus `gorm:"not null"`
 	// CreatedAt 创建时间
 	CreatedAt time.Time
 	// UpdatedAt 订单更新时间
@@ -70,6 +91,9 @@ type Role int
 // OrderType 订单类型
 type OrderType int
 
+// OrderStatus 订单状态
+type OrderStatus int
+
 const (
 	// Admin 超级管理员
 	Admin Role = iota
@@ -100,4 +124,15 @@ const (
 	CampusTransportation
 	// Health 卫生
 	Health
+)
+
+const (
+	// Pending 待处理
+	Pending OrderStatus = iota
+	// InProgress 处理中
+	InProgress
+	// WaitingConfirm 等待确认
+	WaitingConfirm
+	// Success 处理成功
+	Success
 )

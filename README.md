@@ -79,9 +79,9 @@
 
 ## 工单表
 
-| id       | create_user | order_type | CreatedAt | UpdatedAt    | DeletedAt    | CompleteAT   | Info(JSON(map[string]insertface{})) |
-| -------- | ----------- | ---------- | --------- | ------------ | ------------ | ------------ | ----------------------------------- |
-| 唯一标识 | 创建用户    | 订单类型   | 创建时间  | 订单更新时间 | 订单删除时间 | 订单完成时间 | 创建时的一些初始信息                |
+| id       | create_user | order_type | order_status | CreatedAt | UpdatedAt    | DeletedAt    | CompleteAT   | Info(JSON(map[string]insertface{})) |
+| -------- | ----------- | ---------- | ------------ | --------- | ------------ | ------------ | ------------ | ----------------------------------- |
+| 唯一标识 | 创建用户    | 订单类型   | 订单状态     | 创建时间  | 订单更新时间 | 订单删除时间 | 订单完成时间 | 创建时的一些初始信息                |
 
 ## 聊天表
 | id       | order_id | sender | send_time | message(JSON(map[string]insertface{})) |
