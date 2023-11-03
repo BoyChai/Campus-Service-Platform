@@ -24,11 +24,14 @@ func (d *dao) CreateUser(name string, number string, pass string, imgUrl string,
 }
 
 // CreateOrder 创建订单
-func (d *dao) CreateOrder(user uint, orderType OrderType) error {
+func (d *dao) CreateOrder(user uint, orderType OrderType, json JSON) error {
 	order := WorkOrder{
-		CreateUser: user,
-		OrderType:  orderType,
-		Info:       JSON{},
+		CreateUser:  user,
+		OrderType:   orderType,
+		OrderStatus: Pending,
+		CreatedAt:   time.Now(),
+		CompleteAT:  nil,
+		Info:        json,
 	}
 	tx := d.db.Create(&order)
 	if tx.Error != nil {

@@ -66,7 +66,7 @@ type WorkOrder struct {
 	// DeletedAt 订单删除时间
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 	// CompleteAT 订单完成时间
-	CompleteAT time.Time
+	CompleteAT *time.Time
 	// 订单创建时的一些初始信息
 	Info JSON `gorm:"type:json;not null"`
 }
