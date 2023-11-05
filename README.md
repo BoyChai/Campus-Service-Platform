@@ -146,7 +146,9 @@ id 订单id
 
 id 订单id
 
-## 管理系统相关
+## 管理系统相
+
+## 关
 
 ### 用户角色修改
 
@@ -171,3 +173,18 @@ id 订单id
 id 订单id
 
 send_id 发送者id
+
+
+
+# 第三方API接入
+
+## aliyun
+
+阿里云的短信验证码，用来注册和登录
+
+https://dysms.console.aliyun.com/domestic/text
+
+## upyun
+
+又拍云的云存储，用来存储头像，订单图片
+
