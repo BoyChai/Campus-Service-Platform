@@ -9,7 +9,7 @@ import (
 func (d *dao) CheckUser(number string, pass string) (User, error) {
 	var u User
 	tx := d.db.Where("number = ? and pass = ?", number, pass).First(&u)
-	if tx != nil {
+	if tx.Error != nil {
 		return User{}, errors.New(fmt.Sprint("用户检查出现错误:", tx.Error.Error()))
 	}
 	u.Pass = ""
@@ -30,7 +30,7 @@ func (d *dao) GetUser(id uint) (User, error) {
 func (d *dao) GetWXUser(WxID string) (User, error) {
 	var u User
 	tx := d.db.Where("wx_id = ?", WxID).First(&u)
-	if tx != nil {
+	if tx.Error != nil {
 		return User{}, errors.New(fmt.Sprint("用户检查出现错误:", tx.Error.Error()))
 	}
 	return u.Clear(), nil
@@ -40,7 +40,7 @@ func (d *dao) GetWXUser(WxID string) (User, error) {
 func (d *dao) QueryIDOrder(id uint) (WorkOrder, error) {
 	var order WorkOrder
 	tx := d.db.Where("id = ?", id).First(&order)
-	if tx != nil {
+	if tx.Error != nil {
 		return WorkOrder{}, errors.New(fmt.Sprint("通过id查询订单出现错误:", tx.Error.Error()))
 	}
 	return order, nil
@@ -50,7 +50,7 @@ func (d *dao) QueryIDOrder(id uint) (WorkOrder, error) {
 func (d *dao) QueryUserOrder(id uint) ([]WorkOrder, error) {
 	var orders []WorkOrder
 	tx := d.db.Where("create_user = ?", id).Find(&orders)
-	if tx != nil {
+	if tx.Error != nil {
 		return []WorkOrder{}, errors.New(fmt.Sprint("通过user查询订单出现错误:", tx.Error.Error()))
 	}
 	return orders, nil
@@ -60,7 +60,7 @@ func (d *dao) QueryUserOrder(id uint) ([]WorkOrder, error) {
 func (d *dao) QueryOrderMsg(id uint) ([]Chat, error) {
 	var chats []Chat
 	tx := d.db.Where("order_id = ?", id).Find(&chats)
-	if tx != nil {
+	if tx.Error != nil {
 		return []Chat{}, errors.New(fmt.Sprint("通过订单查询聊天记录出现错误:", tx.Error.Error()))
 	}
 	return chats, nil
