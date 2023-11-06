@@ -60,6 +60,25 @@ func (u *user) Signup(ctx *gin.Context) {
 		})
 		return
 	}
+	// 核验是否已注册
+	numberUser, err := dao.Dao.CheckNumberUser(params.Number)
+	if err != nil {
+		fmt.Println("核验用户是否已注册失败")
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+	if numberUser.Number != "" {
+		fmt.Println(numberUser.Number + "已被注册")
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  numberUser.Number + "已被注册",
+			"data": nil,
+		})
+		return
+	}
+
 	// 验证码核验错误
 	if params.Code != utils.Code[params.Number] {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -69,7 +88,7 @@ func (u *user) Signup(ctx *gin.Context) {
 		return
 	}
 	// 创建用户
-	err := dao.Dao.CreateUser(params.Name, params.Number, utils.CalculateMD5Hash(params.Pass), params.Img, params.WxID, 0)
+	err = dao.Dao.CreateUser(params.Name, params.Number, utils.CalculateMD5Hash(params.Pass), params.Img, params.WxID, 0)
 	if err != nil {
 		fmt.Println("注册创建用户时出现错误", err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{

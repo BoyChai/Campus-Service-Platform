@@ -96,13 +96,23 @@
 
 ### 用户注册
 
+> POST /user/sendsms
+
+number 手机号
+
 > POST /user/signup
+
+name 名字
 
 number 手机号
 
 pass 密码
 
+img_url 图片地址
+
 wx_id(可选) 微信ID
+
+code 短信验证码
 
 ### 用户登录
 
