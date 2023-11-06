@@ -178,11 +178,11 @@ send_id 发送者id
 
 # 第三方API接入
 
-## aliyun
+## 互亿无线
 
-阿里云的短信验证码，用来注册和登录
+短信验证码服务，用来注册和登录
 
-https://dysms.console.aliyun.com/domestic/text
+https://user.ihuyi.com/
 
 ## upyun
 

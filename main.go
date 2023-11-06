@@ -4,10 +4,13 @@ import (
 	"Campus-Service-Platform/controller"
 	"Campus-Service-Platform/dao"
 	"Campus-Service-Platform/middle"
+	"Campus-Service-Platform/utils"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	// 初始化注册验证码
+	utils.Code = make(map[string]string)
 	// 连接数据库
 	dao.Client()
 	// 自动建表
