@@ -11,6 +11,8 @@ import (
 func main() {
 	// 初始化注册验证码
 	utils.Code = make(map[string]string)
+	// 初始化upyun对象
+	utils.InitUpyun()
 	// 连接数据库
 	dao.Client()
 	// 自动建表

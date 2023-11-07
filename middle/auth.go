@@ -10,7 +10,7 @@ import (
 func JWTAuth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		//对登录接口放行
-		if len(ctx.Request.URL.String()) >= 6 && ctx.Request.URL.String()[0:6] == "/login" {
+		if len(ctx.Request.URL.String()) >= 6 && ctx.Request.URL.String()[0:6] == "/user/" {
 			ctx.Next()
 		} else {
 			//获取Header中的Authorization

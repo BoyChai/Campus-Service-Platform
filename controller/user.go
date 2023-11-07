@@ -128,7 +128,8 @@ func (u *user) Login(ctx *gin.Context) {
 		})
 		return
 	}
-	token, err := utils.GenerateToken(check.GetID(), int(check.Role))
+	//token, err := utils.GenerateToken(check.GetID(), int(check.Role))
+	token, err := utils.GenerateToken(fmt.Sprint(check.ID), int(check.Role))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"msg":  fmt.Sprint("生成token出现错误:", err.Error()),
