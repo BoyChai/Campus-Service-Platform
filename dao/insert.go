@@ -32,6 +32,7 @@ func (d *dao) CreateOrder(user uint, orderType OrderType, json JSON) (WorkOrder,
 		CreatedAt:   time.Now(),
 		CompleteAT:  nil,
 		Info:        json,
+		Operator:    user,
 	}
 	tx := d.db.Create(&order)
 	if tx.Error != nil {

@@ -74,6 +74,8 @@ type WorkOrder struct {
 	CompleteAT *time.Time
 	// WorkUser 提供保修的人员ID
 	WorkUser uint
+	// Operator 当前状态的操作员
+	Operator uint
 	// 订单创建时的一些初始信息
 	Info JSON `gorm:"type:json;not null"`
 }

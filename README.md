@@ -79,9 +79,9 @@
 
 ## 工单表
 
-| id       | create_user | order_type | order_status | CreatedAt | UpdatedAt    | DeletedAt    | CompleteAT   | work_user        | Info(JSON(map[string]insertface{})) |
-| -------- | ----------- | ---------- | ------------ | --------- | ------------ | ------------ | ------------ | ---------------- | ----------------------------------- |
-| 唯一标识 | 创建用户    | 订单类型   | 订单状态     | 创建时间  | 订单更新时间 | 订单删除时间 | 订单完成时间 | 接单的工作人员ID | 创建时的一些初始信息                |
+| id       | create_user | order_type | order_status | CreatedAt | UpdatedAt    | DeletedAt    | CompleteAT   | work_user        | operator         | Info(JSON(map[string]insertface{})) |
+| -------- | ----------- | ---------- | ------------ | --------- | ------------ | ------------ | ------------ | ---------------- | ---------------- | ----------------------------------- |
+| 唯一标识 | 创建用户    | 订单类型   | 订单状态     | 创建时间  | 订单更新时间 | 订单删除时间 | 订单完成时间 | 接单的工作人员ID | 当前状态的操作员 | 创建时的一些初始信息                |
 
 ## 聊天表
 | id       | order_id | sender | send_time | message(JSON(map[string]insertface{})) |
@@ -219,7 +219,13 @@ id 订单id
 
 ### 取消订单
 
-> POST /order/remove
+> POST /order/cancellation
+
+id 订单id
+
+### 删除订单
+
+> POST /order/delete
 
 id 订单id
 
