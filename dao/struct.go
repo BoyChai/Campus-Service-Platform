@@ -72,6 +72,8 @@ type WorkOrder struct {
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 	// CompleteAT 订单完成时间
 	CompleteAT *time.Time
+	// WorkUser 提供保修的人员ID
+	WorkUser uint
 	// 订单创建时的一些初始信息
 	Info JSON `gorm:"type:json;not null"`
 }
@@ -129,6 +131,8 @@ const (
 	CampusTransportation
 	// Health 卫生
 	Health
+	// Other 其他
+	Other
 )
 
 const (

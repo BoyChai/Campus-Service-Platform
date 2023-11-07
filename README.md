@@ -79,9 +79,9 @@
 
 ## 工单表
 
-| id       | create_user | order_type | order_status | CreatedAt | UpdatedAt    | DeletedAt    | CompleteAT   | Info(JSON(map[string]insertface{})) |
-| -------- | ----------- | ---------- | ------------ | --------- | ------------ | ------------ | ------------ | ----------------------------------- |
-| 唯一标识 | 创建用户    | 订单类型   | 订单状态     | 创建时间  | 订单更新时间 | 订单删除时间 | 订单完成时间 | 创建时的一些初始信息                |
+| id       | create_user | order_type | order_status | CreatedAt | UpdatedAt    | DeletedAt    | CompleteAT   | work_user        | Info(JSON(map[string]insertface{})) |
+| -------- | ----------- | ---------- | ------------ | --------- | ------------ | ------------ | ------------ | ---------------- | ----------------------------------- |
+| 唯一标识 | 创建用户    | 订单类型   | 订单状态     | 创建时间  | 订单更新时间 | 订单删除时间 | 订单完成时间 | 接单的工作人员ID | 创建时的一些初始信息                |
 
 ## 聊天表
 | id       | order_id | sender | send_time | message(JSON(map[string]insertface{})) |
@@ -89,6 +89,65 @@
 | 唯一标识 | 工单id   | 发送者 | 时间      | 消息内容，消息类型，图片信息           |
 
 发送者应该是是一个Role类型，超级管理员和工作者的领导都有权限查看聊天记录，查询的时候应该靠工单的id进行查询。消息的具体内容存储在一个json里面，内容，类型，发送的图片，图片地址。。
+
+# 类型对照表
+
+## Role角色
+
+```go
+const (
+	// Admin 超级管理员 0
+	Admin Role = iota
+	// Leader 领导 1
+	Leader
+	// Work 工作者 2
+	Work
+	// Ordinary 普通用户 3
+	Ordinary
+)
+```
+
+## OrderType订单类型
+
+```go
+const (
+    // Power 电力故障 0
+    Power OrderType = iota
+    // Network 网络故障 1
+    Network
+    // Water 水源故障 2 
+    Water
+    // HVAC 暖通空调故障 3
+    HVAC
+    // Device 设备故障 4
+    Device
+    // Construction 建筑设施 5
+    Construction
+    // SecuritySystem 安全系统 6
+    SecuritySystem
+    // CampusTransportation 校园交通 7
+    CampusTransportation
+    // Health 卫生 8
+    Health
+    // Other 其他 9
+    Other
+)
+```
+
+## OrderStatus订单状态
+
+```go
+const (
+    // Pending 待处理 0
+    Pending OrderStatus = iota
+    // InProgress 处理中 1 
+    InProgress
+    // WaitingConfirm 等待确认 2
+    WaitingConfirm
+    // Success 处理成功 3
+    Success
+)
+```
 
 # 后端API设计
 
@@ -134,9 +193,15 @@ img 头像
 
 ## 工单系统相关
 
+### 通过状态获取订单
+
+> POST /order/get
+
+status 状态类型(使用状态的id)
+
 ### 创建订单
 
-> POST /order/createtype
+> POST /order/create
 
 addres 地点
 
