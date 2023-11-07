@@ -100,8 +100,7 @@ func (o *order) CreateOrder(ctx *gin.Context) {
 		})
 		return
 	}
-	parseUint, _ := strconv.ParseUint(fmt.Sprint(id), 10, 64)
-	order, err := dao.Dao.CreateOrder(uint(parseUint), dao.OrderType(params.OrderType), dao.JSON{
+	order, err := dao.Dao.CreateOrder(utils.GetUint(fmt.Sprint(id)), dao.OrderType(params.OrderType), dao.JSON{
 		"img":  url,
 		"info": params.Info,
 	})
@@ -118,4 +117,35 @@ func (o *order) CreateOrder(ctx *gin.Context) {
 		"data": order,
 	})
 	return
+}
+
+func (o *order) ReceivingOrder(ctx *gin.Context) {
+	// 拿到身份
+	claims, _ := ctx.Get("claims")
+	id := claims.(map[string]interface{})["id"]
+	//参数绑定
+	params := new(struct {
+		OrderID string `form:"id" binding:"required"`
+	})
+	if err := ctx.Bind(&params); err != nil {
+		fmt.Println("Bind请求参数失败, " + err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+	err := dao.Dao.ReceivingOrder(params.OrderID, utils.GetUint(fmt.Sprint(id)))
+	if err != nil {
+		fmt.Println("接单失败, " + err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg":  "接单成功!",
+		"data": nil,
+	})
 }

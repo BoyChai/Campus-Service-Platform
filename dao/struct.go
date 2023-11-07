@@ -144,6 +144,8 @@ const (
 	WaitingConfirm
 	// Success 处理成功
 	Success
+	// Cancellation 订单被取消
+	Cancellation
 )
 
 // GetID 获取补位的id

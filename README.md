@@ -138,14 +138,16 @@ const (
 
 ```go
 const (
-    // Pending 待处理 0
-    Pending OrderStatus = iota
-    // InProgress 处理中 1 
-    InProgress
-    // WaitingConfirm 等待确认 2
-    WaitingConfirm
-    // Success 处理成功 3
-    Success
+	// Pending 待处理 0
+	Pending OrderStatus = iota
+	// InProgress 处理中 1
+	InProgress
+	// WaitingConfirm 等待确认 2
+	WaitingConfirm
+	// Success 处理成功 3
+	Success
+	// Cancellation 订单被取消 4
+	Cancellation
 )
 ```
 
@@ -153,7 +155,7 @@ const (
 
 ## 用户系统相关
 
-### 用户注册
+### 用户注册(实现)
 
 > POST /user/sendsms
 
@@ -173,7 +175,7 @@ wx_id(可选) 微信ID
 
 code 短信验证码
 
-### 用户登录
+### 用户登录(实现)
 
 > POST /user/login
 
@@ -193,13 +195,13 @@ img 头像
 
 ## 工单系统相关
 
-### 通过状态获取订单
+### 通过状态获取订单(实现)
 
 > POST /order/get
 
 status 状态类型(使用状态的id)
 
-### 创建订单
+### 创建订单(实现)
 
 > POST /order/create
 
@@ -208,6 +210,12 @@ addres 地点
 img 照片
 
 info 备注
+
+### 工作人员接单(实现)
+
+> POST /order/receiving
+
+id 订单id
 
 ### 取消订单
 

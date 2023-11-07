@@ -16,5 +16,6 @@ func (r *router) InitApiRouter(router *gin.Engine) {
 		POST("/user/login", User.Login).
 		// 订单相关
 		GET("/order/list", Order.GetOrders).
-		POST("/order/create", Order.CreateOrder)
+		POST("/order/create", Order.CreateOrder).
+		POST("/order/receiving", Order.ReceivingOrder)
 }
