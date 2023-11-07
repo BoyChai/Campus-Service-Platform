@@ -76,3 +76,13 @@ func (d *dao) QueryOrderMsg(id uint) ([]Chat, error) {
 	}
 	return chats, nil
 }
+
+// QueryStatusOrder 通过订单状态查询订单
+func (d *dao) QueryStatusOrder(role Role) ([]WorkOrder, error) {
+	var orders []WorkOrder
+	tx := d.db.Where("order_status = ?", role).Find(&orders)
+	if tx.Error != nil {
+		return []WorkOrder{}, errors.New(fmt.Sprint("通过状态查询订单出现错误:", tx.Error.Error()))
+	}
+	return orders, nil
+}
