@@ -18,8 +18,10 @@ func (r *router) InitApiRouter(router *gin.Engine) {
 		GET("/order/list", Order.GetOrders).
 		POST("/order/create", Order.CreateOrder).
 		POST("/order/receiving", Order.ReceivingOrder).
-		POST("/order/receiving", Order.CancellationOrder).
-		POST("/order/receiving", Order.RemoveOrder).
-		POST("/order/complete", Order.CompleteOrder)
-
+		POST("/order/cancellation", Order.CancellationOrder).
+		POST("/order/remove", Order.RemoveOrder).
+		POST("/order/complete", Order.CompleteOrder).
+		// 聊天相关
+		PUT("/msg/send", Chat.SendMessage).
+		GET("/msg/list", Chat.GetMsg)
 }

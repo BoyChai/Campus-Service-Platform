@@ -30,7 +30,7 @@ func (u *user) SendSMS(ctx *gin.Context) {
 	if err != nil {
 		fmt.Println(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"msg":  err,
+			"msg":  err.Error(),
 			"data": nil,
 		})
 		return
