@@ -119,6 +119,7 @@ func (o *order) CreateOrder(ctx *gin.Context) {
 	return
 }
 
+// ReceivingOrder 接单
 func (o *order) ReceivingOrder(ctx *gin.Context) {
 	// 拿到身份
 	claims, _ := ctx.Get("claims")
@@ -146,6 +147,70 @@ func (o *order) ReceivingOrder(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, gin.H{
 		"msg":  "接单成功!",
+		"data": nil,
+	})
+}
+
+// CancellationOrder 取消订单
+func (o *order) CancellationOrder(ctx *gin.Context) {
+	// 拿到身份
+	claims, _ := ctx.Get("claims")
+	id := claims.(map[string]interface{})["id"]
+	//参数绑定
+	params := new(struct {
+		OrderID string `form:"id" binding:"required"`
+	})
+	if err := ctx.Bind(&params); err != nil {
+		fmt.Println("Bind请求参数失败, " + err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+	err := dao.Dao.CancellationOrder(params.OrderID, utils.GetUint(fmt.Sprint(id)))
+	if err != nil {
+		fmt.Println("取消失败, " + err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg":  "取消成功!",
+		"data": nil,
+	})
+}
+
+// RemoveOrder 删除订单
+func (o *order) RemoveOrder(ctx *gin.Context) {
+	// 拿到身份
+	claims, _ := ctx.Get("claims")
+	id := claims.(map[string]interface{})["id"]
+	//参数绑定
+	params := new(struct {
+		OrderID string `form:"id" binding:"required"`
+	})
+	if err := ctx.Bind(&params); err != nil {
+		fmt.Println("Bind请求参数失败, " + err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+	err := dao.Dao.RemoveOrder(params.OrderID, utils.GetUint(fmt.Sprint(id)))
+	if err != nil {
+		fmt.Println("删除失败, " + err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg":  "删除成功!",
 		"data": nil,
 	})
 }
