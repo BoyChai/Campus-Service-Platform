@@ -24,7 +24,7 @@ func (d *dao) CreateUser(name string, number string, pass string, imgUrl string,
 }
 
 // CreateOrder 创建订单
-func (d *dao) CreateOrder(user uint, orderType OrderType, json JSON) error {
+func (d *dao) CreateOrder(user uint, orderType OrderType, json JSON) (WorkOrder, error) {
 	order := WorkOrder{
 		CreateUser:  user,
 		OrderType:   orderType,
@@ -35,9 +35,9 @@ func (d *dao) CreateOrder(user uint, orderType OrderType, json JSON) error {
 	}
 	tx := d.db.Create(&order)
 	if tx.Error != nil {
-		return errors.New(fmt.Sprint("创建订单出现错误:", tx.Error.Error()))
+		return WorkOrder{}, errors.New(fmt.Sprint("创建订单出现错误:", tx.Error.Error()))
 	}
-	return nil
+	return order, nil
 }
 
 // SendMessage 提交聊天记录

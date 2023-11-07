@@ -1,0 +1,84 @@
+package controller
+
+import (
+	"Campus-Service-Platform/dao"
+	"Campus-Service-Platform/utils"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"net/http"
+	"strconv"
+	"strings"
+)
+
+var Order order
+
+type order struct {
+}
+
+// CreateOrder 创建订单
+func (o *order) CreateOrder(ctx *gin.Context) {
+	// 拿到身份
+	claims, _ := ctx.Get("claims")
+	id := claims.(map[string]interface{})["id"]
+	//参数绑定
+	params := new(struct {
+		OrderType int    `form:"type" binding:"required"`
+		Info      string `form:"info" binding:"required"`
+	})
+	if err := ctx.Bind(&params); err != nil {
+		fmt.Println("Bind请求参数失败, " + err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+	file, err := ctx.FormFile("img")
+	if err != nil {
+		fmt.Println("img请求参数失败, " + err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+	img, err := file.Open()
+	defer img.Close()
+	if err != nil {
+		fmt.Println("img文件Open失败, " + err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+	fileName := fmt.Sprint(utils.GetNumber() + "." + strings.Split(file.Filename, ".")[1])
+	url, err := utils.PutOrderImg(fileName, img)
+	if err != nil {
+		fmt.Println("img文件上传失败, " + err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+	parseUint, _ := strconv.ParseUint(fmt.Sprint(id), 10, 64)
+	order, err := dao.Dao.CreateOrder(uint(parseUint), dao.OrderType(params.OrderType), dao.JSON{
+		"img":  url,
+		"info": params.Info,
+	})
+	if err != nil {
+		fmt.Println("订单创建失败, " + err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg":  "订单创建成功",
+		"data": order,
+	})
+	return
+
+}

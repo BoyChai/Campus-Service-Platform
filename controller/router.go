@@ -9,8 +9,11 @@ var Router router
 type router struct{}
 
 func (r *router) InitApiRouter(router *gin.Engine) {
-	router.POST("/user/sendsms", User.SendSMS).
+	router.
+		// 用户相关
+		POST("/user/sendsms", User.SendSMS).
 		POST("/user/signup", User.Signup).
-		POST("/user/login", User.Login)
-
+		POST("/user/login", User.Login).
+		// 订单相关
+		POST("/order/create", Order.CreateOrder)
 }
