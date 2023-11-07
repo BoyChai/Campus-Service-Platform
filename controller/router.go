@@ -19,6 +19,7 @@ func (r *router) InitApiRouter(router *gin.Engine) {
 		POST("/order/create", Order.CreateOrder).
 		POST("/order/receiving", Order.ReceivingOrder).
 		POST("/order/receiving", Order.CancellationOrder).
-		POST("/order/receiving", Order.RemoveOrder)
+		POST("/order/receiving", Order.RemoveOrder).
+		POST("/order/complete", Order.CompleteOrder)
 
 }

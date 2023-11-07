@@ -214,3 +214,35 @@ func (o *order) RemoveOrder(ctx *gin.Context) {
 		"data": nil,
 	})
 }
+
+// CompleteOrder 完成订单
+func (o *order) CompleteOrder(ctx *gin.Context) {
+	// 拿到身份
+	claims, _ := ctx.Get("claims")
+	id := claims.(map[string]interface{})["id"]
+	//参数绑定
+	params := new(struct {
+		OrderID string `form:"id" binding:"required"`
+	})
+	if err := ctx.Bind(&params); err != nil {
+		fmt.Println("Bind请求参数失败, " + err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+	err := dao.Dao.CompleteOrder(params.OrderID, utils.GetUint(fmt.Sprint(id)))
+	if err != nil {
+		fmt.Println("完成失败, " + err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"msg":  err.Error(),
+			"data": nil,
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg":  "订单完成!",
+		"data": nil,
+	})
+}

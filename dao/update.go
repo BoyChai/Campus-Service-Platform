@@ -48,3 +48,16 @@ func (d *dao) RemoveOrder(orderID string, id uint) error {
 	}
 	return nil
 }
+
+// CompleteOrder 完成订单
+func (d *dao) CompleteOrder(orderID string, id uint) error {
+	tx := d.db.Model(&WorkOrder{}).Where("id = ?", orderID).Updates(map[string]interface{}{
+		"order_status": Success,
+		"operator":     id,
+	})
+	if tx.Error != nil {
+		fmt.Println("完成订单时产生错误", tx.Error)
+		return errors.New(fmt.Sprint("完成订单时产生错误", tx.Error))
+	}
+	return nil
+}
